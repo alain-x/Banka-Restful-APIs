@@ -3,6 +3,8 @@ package com.bank.Banking.controller;
 import com.bank.Banking.entity.Account;
 import com.bank.Banking.enums.AccountType;
 import com.bank.Banking.service.interf.AccountService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,8 +22,14 @@ public class AccountController {
     }
 
     @PostMapping("/create")
-    public Account createAccount(@RequestBody AccountRequest request) {
-        return accountService.createAccount(request.getEmail(), request.getAccountType());
+    public ResponseEntity<?> createAccount(@RequestBody AccountRequest request) {
+        try {
+            Account account = accountService.createAccount(request.getEmail(), request.getAccountType());
+            return ResponseEntity.ok(account);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Account creation failed: " + e.getMessage());
+        }
     }
 
     // View all user accounts - Admin/STAFF only

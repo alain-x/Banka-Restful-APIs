@@ -1,10 +1,19 @@
 <div class="bg-gray-100 flex items-center justify-center min-h-screen">
-  <form class="bg-white p-6 rounded-lg shadow-lg w-96">
+  <form
+    (ngSubmit)="handleSubmit()"
+    class="bg-white p-6 rounded-lg shadow-lg w-96"
+  >
     <h2 class="text-2xl font-bold text-gray-700 text-center mb-4">Login</h2>
 
+    <p *ngIf="message" class="text-red-600 text-center font-semibold">
+      {{ message }}
+    </p>
+
     <div class="mb-4">
-      <label class="block text-gray-600 text-sm mb-2" for="email">Email</label>
+      <label class="block text-gray-600 text-sm mb-2">Email</label>
       <input
+        name="email"
+        [(ngModel)]="formData.email"
         type="email"
         id="email"
         placeholder="Enter your email"
@@ -13,10 +22,10 @@
     </div>
 
     <div class="mb-4">
-      <label class="block text-gray-600 text-sm mb-2" for="password"
-        >Password</label
-      >
+      <label class="block text-gray-600 text-sm mb-2">Password</label>
       <input
+        name="password"
+        [(ngModel)]="formData.password"
         type="password"
         id="password"
         placeholder="Enter your password"
