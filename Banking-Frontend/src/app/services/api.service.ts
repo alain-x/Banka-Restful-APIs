@@ -24,4 +24,17 @@ export class ApiService {
   loginUser(loginDetails: any): Observable<any> {
     return this.http.post(`${ApiService.BASE_URL}/auth/login`, loginDetails);
   }
+
+  logOut(): void {
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
+  }
+  isAdmin(): boolean {
+    const role = localStorage.getItem('role');
+    return role === 'ADMIN' || role === 'STAFF';
+  }
+  isAutheticated(): boolean {
+    const token = localStorage.getItem('token');
+    return !!token;
+  }
 }
