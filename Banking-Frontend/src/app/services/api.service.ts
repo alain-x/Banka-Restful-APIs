@@ -44,7 +44,7 @@ export class ApiService {
 
   // Account APIs
   createAccount(data: any) {
-    return this.http.post('http://localhost:8090/api/accounts/create', data, {
+    return this.http.post(`${ApiService.BASE_URL}/api/accounts/create`, data, {
       headers: this.getHeaders(),
     });
   }

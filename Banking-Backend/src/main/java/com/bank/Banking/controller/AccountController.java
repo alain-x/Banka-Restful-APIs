@@ -8,7 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -22,35 +24,70 @@ public class AccountController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createAccount(@RequestBody AccountRequest request) {
+    public ResponseEntity<Map<String, Object>> createAccount(@RequestBody AccountRequest request) {
+        Map<String, Object> response = new HashMap<>();
         try {
             Account account = accountService.createAccount(request.getEmail(), request.getAccountType());
-            return ResponseEntity.ok(account);
+            response.put("status", "SUCCESS");
+            response.put("message", "Account created successfully");
+            response.put("data", account);
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Account creation failed: " + e.getMessage());
+            response.put("status", "ERROR");
+            response.put("message", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
+
 
     // View all user accounts - Admin/STAFF only
     @GetMapping("/")
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('STAFF')")
-    public List<Account> getAllAccounts() {
-        return accountService.getAllAccounts();
-    }
+    public ResponseEntity<Map<String, Object>> getAllAccounts() {
+        Map<String, Object> response = new HashMap<>();
+        List<Account> accounts = accountService.getAllAccounts();
 
+        response.put("status", "SUCCESS");
+        response.put("message", "Accounts retrieved successfully");
+        response.put("data", accounts);
+        return ResponseEntity.ok(response);
+    }
     // View specific user account by email - Admin/STAFF only
     @GetMapping("email/{email}")
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('STAFF')")
-    public Optional<Account> getAccountByEmail(@PathVariable String email) {
-        return accountService.getAccountByEmail(email);
+    public ResponseEntity<Map<String, Object>> getAccountByEmail(@PathVariable String email) {
+        Map<String, Object> response = new HashMap<>();
+        Optional<Account> account = accountService.getAccountByEmail(email);
+
+        if (account.isPresent()) {
+            response.put("status", "SUCCESS");
+            response.put("message", "Account found");
+            response.put("data", account);
+            return ResponseEntity.ok(response);
+        } else {
+            response.put("status", "ERROR");
+            response.put("message", "Account not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
     }
 
     // View specific user account Admin/STAFF only
     @GetMapping("id/{id}")
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('STAFF')")
-    public Optional<Account> getAccountById(@PathVariable Long id) {
-        return accountService.getAccountById(id);
+    public ResponseEntity<Map<String, Object>> getAccountById(@PathVariable Long id) {
+        Map<String, Object> response = new HashMap<>();
+        Optional<Account> account = accountService.getAccountById(id);
+
+        if (account.isPresent()) {
+            response.put("status", "SUCCESS");
+            response.put("message", "Account found");
+            response.put("data", account);
+            return ResponseEntity.ok(response);
+        } else {
+            response.put("status", "ERROR");
+            response.put("message", "Account not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
     }
 
     public static class AccountRequest {

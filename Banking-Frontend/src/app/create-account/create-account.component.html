@@ -1,10 +1,37 @@
-<div class="flex justify-center space-x-6">
-  <form class="bg-white p-6 rounded-lg shadow-lg w-96">
+<div class="flex justify-center space-x-6 mt-[60px]">
+  <form
+    (ngSubmit)="handleSubmit()"
+    class="bg-white p-6 rounded-lg shadow-lg w-96"
+  >
+    <h1 class="flex justify-center font-bold">Create Account</h1>
+    <p *ngIf="message" class="text-green-600">{{ message }}</p>
+
     <label class="block text-gray-600 text-sm mb-2">Email</label>
     <input
+      [(ngModel)]="formData1.email"
       type="text"
       name="email"
-      class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-400"
+      class="w-full p-2 border border-gray-300 rounded-[10px]"
+      required
     />
+
+    <label class="block text-gray-600 text-sm mb-2">Account Type</label>
+    <select
+      [(ngModel)]="formData1.accountType"
+      name="accountType"
+      class="w-full p-2 border border-gray-300 rounded-[10px]"
+      required
+    >
+      <option value="" disabled selected>Select an account type</option>
+      <option value="SAVINGS">SAVINGS</option>
+      <option value="CURRENT">CURRENT</option>
+    </select>
+
+    <button
+      type="submit"
+      class="w-full bg-blue-600 mt-[13px] text-white p-2 rounded-lg hover:bg-blue-700 transition"
+    >
+      Create
+    </button>
   </form>
 </div>
