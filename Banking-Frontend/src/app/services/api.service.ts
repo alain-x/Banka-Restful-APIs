@@ -90,12 +90,10 @@ export class ApiService {
     );
   }
 
-  getTransactionHistory(accountId: number): Observable<any> {
+  getTransactionHistory(accountId: any): Observable<any> {
     return this.http.get(
-      `${ApiService.BASE_URL}/api/transactions/history/${accountId}`,
-      {
-        headers: this.getHeaders(),
-      }
+      `${ApiService.BASE_URL}/api/transactions/my-transactions/`,
+      accountId
     );
   }
 

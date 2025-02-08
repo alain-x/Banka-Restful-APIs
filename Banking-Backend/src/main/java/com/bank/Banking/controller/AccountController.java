@@ -57,16 +57,16 @@ public class AccountController {
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('STAFF')")
     public ResponseEntity<Map<String, Object>> getAccountByEmail(@PathVariable String email) {
         Map<String, Object> response = new HashMap<>();
-        Optional<Account> account = accountService.getAccountByEmail(email);
+        List<Account> accounts = accountService.getAccountByEmail(email);
 
-        if (account.isPresent()) {
+        if (!accounts.isEmpty()) {
             response.put("status", "SUCCESS");
-            response.put("message", "Account found");
-            response.put("data", account);
+            response.put("message", accounts.size() + " accounts found");
+            response.put("data", accounts);
             return ResponseEntity.ok(response);
         } else {
             response.put("status", "ERROR");
-            response.put("message", "Account not found");
+            response.put("message", "No accounts found for this email");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }

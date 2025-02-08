@@ -13,27 +13,33 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./account.component.css'],
 })
 export class AccountComponent implements OnInit {
-  accountId!: number; // You can dynamically set this value
+  accountId?: number; // Optional to handle cases where the user has no account
   transactions: any[] = [];
 
   constructor(private router: Router, private apiService: ApiService) {}
 
   ngOnInit(): void {
-    const accountIdFromStorage = localStorage.getItem('accountId');
+    // Retrieve user data from localStorage (assuming it's stored after login)
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
 
-    if (accountIdFromStorage) {
-      this.accountId = +accountIdFromStorage;
-      console.log('AccountId from localStorage:', this.accountId); // Debugging
+    // Check if the user has an accountId
+    if (user && user.accountId) {
+      this.accountId = user.accountId;
+      console.log('Account ID:', this.accountId); // Debugging
       this.loadTransactionHistory();
     } else {
-      console.error('Account ID is not found.');
+      console.warn('User does not have an associated account.');
     }
   }
 
   loadTransactionHistory(): void {
+    if (!this.accountId) {
+      console.error('No account ID available, cannot fetch transactions.');
+      return;
+    }
+
     this.apiService.getTransactionHistory(this.accountId).subscribe(
       (response) => {
-        // Check if the response has the data key and map it to the transactions
         if (response && response.data && Array.isArray(response.data)) {
           this.transactions = response.data;
           console.log('Transaction History:', this.transactions);

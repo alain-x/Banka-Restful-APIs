@@ -11,7 +11,7 @@ public interface AccountService {
 
     List<Account> getAllAccounts();
 
-    Optional<Account> getAccountByEmail(String email);
+    List<Account> getAccountByEmail(String email);
 
     Optional<Account> getAccountById(Long id);
 }

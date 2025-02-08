@@ -48,7 +48,7 @@ public class AdminController {
         }
     }
 
-    // ✅ Delete Account - Returns OK or BAD_REQUEST
+    // Delete Account - Returns OK or BAD_REQUEST
     @DeleteMapping("/delete/{userId}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Map<String, Object>> deleteAccount(@PathVariable Long userId) {
